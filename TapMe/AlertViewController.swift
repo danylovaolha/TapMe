@@ -10,21 +10,21 @@ class AlertViewController: UIViewController {
     }
     
     func showErrorAlert(_ fault: Fault, _ target: UIViewController) {
-        let alert = UIAlertController(title: String(format: "Error %@", fault.faultCode), message: fault.detail, preferredStyle: .alert)
+        let alert = UIAlertController(title: String(format: "❗️Error %@", fault.faultCode), message: fault.detail, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         target.view.endEditing(true)
         target.present(alert, animated: true)
     }
     
     func showRegisterPlayerAlert(_ target: UIViewController) {
-        let alert = UIAlertController(title: "Create a new player", message: "Please sign up as a new player", preferredStyle: .alert)
+        let alert = UIAlertController(title: "👤 Create a new player", message: "Please sign up as a new player", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         target.view.endEditing(true)
         target.present(alert, animated: true)
     }
     
     func showProfilePicturePicker (_ imageView: UIImageView, _ target: UIViewController) {
-        let alert = UIAlertController(title: "Set profie picture", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "👤 Set profie picture", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Use camera", style: .default, handler: { alertAction in
             if (!UIImagePickerController.isSourceTypeAvailable(.camera)) {
                 self.showErrorAlert(Fault(message: "", detail: "No device found. Camera is not available"), target)
@@ -50,7 +50,14 @@ class AlertViewController: UIViewController {
     }
     
     func showScoreAlert(_ scores: Int, _ target: UIViewController) {
-        let alert = UIAlertController(title: "Finish", message: String(format: "Your score is %i", scores), preferredStyle: .alert)
+        let alert = UIAlertController(title: "⭐️ Finish ⭐️", message: String(format: "Your score is %i", scores), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        target.view.endEditing(true)
+        target.present(alert, animated: true)
+    }
+    
+    func showCongratulationsAlert(_ message: String, _ target: UIViewController) {
+        let alert = UIAlertController(title: "🎉 Congratulations 🎉", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         target.view.endEditing(true)
         target.present(alert, animated: true)

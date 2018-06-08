@@ -157,13 +157,13 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Game max score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sal-Gc-HN5">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏆 World record: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sal-Gc-HN5">
                                 <rect key="frame" x="10" y="592" width="355" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your max score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kh3-kB-x6d">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⭐️ Your max score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kh3-kB-x6d">
                                 <rect key="frame" x="10" y="563" width="355" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -207,9 +207,9 @@
                                 <action selector="pressedLogout:" destination="JKq-Vh-kM2" id="c3W-p8-e54"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Menu" id="7ni-Ls-0Xi">
+                        <barButtonItem key="rightBarButtonItem" title="Players" id="7ni-Ls-0Xi">
                             <connections>
-                                <segue destination="AKW-tC-bGU" kind="show" id="jir-3N-WXA"/>
+                                <action selector="pressedPlayers:" destination="JKq-Vh-kM2" id="Ifu-IN-jPm"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -220,12 +220,13 @@
                         <outlet property="timerLabel" destination="SkW-kV-5S7" id="EUg-ax-Ipo"/>
                         <outlet property="yourMaxScore" destination="Kh3-kB-x6d" id="rtL-ou-eFM"/>
                         <segue destination="rYu-dv-lmd" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVC:" id="deB-Wo-Hdw"/>
+                        <segue destination="AKW-tC-bGU" kind="show" identifier="segueToPlayers" id="ffO-mc-YQY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rfd-64-DkE" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="rYu-dv-lmd" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1969" y="-564"/>
+            <point key="canvasLocation" x="1968.8" y="-564.46776611694156"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="czd-bh-AWz">
@@ -345,21 +346,37 @@
             </objects>
             <point key="canvasLocation" x="1205.5999999999999" y="262.21889055472263"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Players-->
         <scene sceneID="nXn-cs-2S8">
             <objects>
-                <tableViewController id="AKW-tC-bGU" sceneMemberID="viewController">
+                <tableViewController id="AKW-tC-bGU" customClass="PlayerViewController" customModule="TapMe" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="bej-ed-DuQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.17254901959999999" green="0.24313725489999999" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="lRb-8i-ITY">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlayerCell" textLabel="hmE-qR-fGO" detailTextLabel="JLY-wD-fvK" style="IBUITableViewCellStyleValue1" id="lRb-8i-ITY">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lRb-8i-ITY" id="jau-x6-oMs">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hmE-qR-fGO">
+                                            <rect key="frame" x="16" y="12" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JLY-wD-fvK">
+                                            <rect key="frame" x="315" y="12" width="44" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.20392156859999999" green="0.28627450980000002" blue="0.36862745099999999" alpha="1" colorSpace="calibratedRGB"/>
                             </tableViewCell>
@@ -369,6 +386,7 @@
                             <outlet property="delegate" destination="AKW-tC-bGU" id="aiM-ZH-Ls5"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Players" id="oMF-Qg-mZY"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0eG-tQ-je5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

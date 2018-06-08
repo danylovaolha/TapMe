@@ -9,15 +9,17 @@ class TapMeViewController: UIViewController {
     @IBOutlet weak var gameMaxScore: UILabel!
     
     var player: Player!
+    var channel: Channel?
+    var score = 0
+    var worldRecordScore = 0
     var countdownTimer: Timer!
     var totalTime = 5
     var timerStarted = false
-    var score = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getPlayer(Backendless.sharedInstance().userService.currentUser.email as String)
-        addEventListeners()
+        self.addDataEventListeners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,12 +49,20 @@ class TapMeViewController: UIViewController {
         timerStarted = false
         navigationController?.setToolbarHidden(true, animated: true)
         timerLabel.text = ""
-        AlertViewController.sharedInstance.showScoreAlert(score, self)
         totalTime = 5
+        
         if (player.maxScore < score) {
             player.maxScore = score;
             Backendless.sharedInstance().data.of(Player.ofClass()).save(player, response: { updatedPlayer in
-                self.player = updatedPlayer as! Player
+            }, error: { fault in
+                AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            })
+        }
+        
+        if (worldRecordScore < player.maxScore) {
+            let publishOptions = PublishOptions()
+            publishOptions.addHeader("bestPlayerEmail", value: player.user?.email)
+            Backendless.sharedInstance().messaging.publish("TapMeChannel", message: "You have set a new record!", publishOptions: publishOptions, response: { messageStatus in
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
             })
@@ -70,10 +80,9 @@ class TapMeViewController: UIViewController {
         queryBuilder.setWhereClause(String(format: "user.email = '%@'", email))
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
             self.player = foundPlayers?.first as! Player
-            DispatchQueue.main.async {
-                self.navigationItem.title = self.player.name
-            }
+            self.addMessageListeners()
             self.fillScores(self.player)
+            DispatchQueue.main.async { self.navigationItem.title = self.player.name }
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
@@ -81,23 +90,48 @@ class TapMeViewController: UIViewController {
     
     func fillScores(_ player: Player) {
         DispatchQueue.main.async {
-            self.yourMaxScore.text = String(format: "Your max score: %i", self.player.maxScore)
+            self.yourMaxScore.text = String(format: "⭐️ Your max score: %i", player.maxScore)
             let queryBuilder = DataQueryBuilder()!
             queryBuilder.setProperties(["Max(maxScore) as maxScore"])
             Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { result in
-                self.gameMaxScore.text = String(format: "Game max score: %i", (result?.first as! Player).maxScore)
+                let bestPlayer = (result?.first as! Player)
+                self.worldRecordScore = bestPlayer.maxScore
+                self.gameMaxScore.text = String(format: "🏆 World record: %i", self.worldRecordScore)
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
             })
         }
     }
     
-    func addEventListeners() {
+    func addDataEventListeners() {
         Backendless.sharedInstance().data.of(Player.ofClass()).rt.addUpdateListener({ updatedPlayer in
             self.fillScores(updatedPlayer as! Player)
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
+    }
+    
+    func addMessageListeners() {
+        channel = Backendless.sharedInstance().messaging.subscribe("TapMeChannel")
+        channel?.addMessageListenerString(String(format: "bestPlayerEmail = '%@''", (player.user?.email)!), response: { message in
+            AlertViewController.sharedInstance.showCongratulationsAlert(message!, self)
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+        })
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "segueToPlayers") {
+            let queryBuilder = DataQueryBuilder()!
+            queryBuilder.setSortBy(["maxScore DESC", "name"])
+            Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { players in
+                let playersVC = segue.destination as! PlayerViewController
+                playersVC.players = players as? [Player]
+                playersVC.tableView.reloadData()
+            }, error: { fault in
+                AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            })
+        }
     }
     
     @IBAction func pressedLogout(_ sender: Any) {
@@ -115,5 +149,9 @@ class TapMeViewController: UIViewController {
     
     @IBAction func pressedStop(_ sender: Any) {
         endTimer()
+    }
+    
+    @IBAction func pressedPlayers(_ sender: Any) {
+        performSegue(withIdentifier: "segueToPlayers", sender: nil)
     }
 }
