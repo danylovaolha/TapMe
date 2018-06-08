@@ -95,30 +95,72 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         activityIndicator.startAnimating()
         
         let data = UIImagePNGRepresentation(profileImageView.image!)
-        let filePathName = String(format: "/profileImages/%@", emailField.text!)
-        Backendless.sharedInstance().file.uploadFile(filePathName, content: data, overwriteIfExist: true, response: { userProfileImage in
-            let user = BackendlessUser()
-            user.setProperty("profileImage", object: userProfileImage?.fileURL)
-            user.name = self.nameField.text! as NSString
-            user.email = self.emailField.text! as NSString
-            user.password = self.passwordField.text! as NSString
-            Backendless.sharedInstance().userService.register(user, response: { registeredUser in
+        let filePathName = String(format: "/tapMeProfileImages/%@.png", emailField.text!)
+        Backendless.sharedInstance().file.uploadFile(filePathName, content: data, overwriteIfExist: true, response: { profileImage in
+            let queryBuilder = DataQueryBuilder()!
+            queryBuilder.setWhereClause(String(format: "email = '%@'", self.emailField.text!))
+            
+            Backendless.sharedInstance().data.of(BackendlessUser.ofClass()).find(queryBuilder, response: { registeredUsers in
+                if (registeredUsers?.first != nil) {
+                    self.createNewPlayer(registeredUsers?.first as? BackendlessUser, profileImage, color)
+                }
+                else {
+                    let user = BackendlessUser()
+                    user.email = self.emailField.text! as NSString
+                    user.password = self.passwordField.text! as NSString
+                    Backendless.sharedInstance().userService.register(user, response: { registeredUser in
+                        self.createNewPlayer(registeredUser, profileImage, color)
+                    }, error: { fault in
+                        AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                        self.returnToSignUp(color!)
+                    })
+                }
+            }, error: {  fault in
+                AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            })
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            self.returnToSignUp(color!)
+        })
+    }
+    
+    func createNewPlayer(_ registeredUser: BackendlessUser?, _ profileImage: BackendlessFile?, _ color: UIColor?) {
+        let newPlayer = Player()
+        newPlayer.profileImageUrl = profileImage?.fileURL
+        newPlayer.maxScore = 0
+        newPlayer.name = nameField.text
+        Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
+            let userId: String = registeredUser!.objectId! as String
+            Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Useres:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
                 self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
                 self.profileImageView.image = UIImage(named: "profileImage.png")
                 self.nameField.text = ""
                 self.emailField.text = ""
                 self.passwordField.text = ""
-                
                 self.activityIndicator.stopAnimating()
                 self.activityIndicator.isHidden = true
                 self.navigationController?.navigationBar.isUserInteractionEnabled = true
                 self.navigationController?.navigationBar.tintColor = color
-                
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                self.returnToSignUp(color!)
             })
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            self.returnToSignUp(color!)
         })
+    }
+    
+    func returnToSignUp(_ color: UIColor) {
+        self.activityIndicator.stopAnimating()
+        self.activityIndicator.isHidden = true
+        self.navigationController?.navigationBar.isUserInteractionEnabled = true
+        self.navigationController?.navigationBar.tintColor = color
+        profileImageView.isUserInteractionEnabled = true
+        self.nameField.isEnabled = true
+        self.emailField.isEnabled = true
+        self.passwordField.isEnabled = true
+        self.signUpButton.isEnabled = true
+        navigationController?.navigationBar.isUserInteractionEnabled = true
     }
 }

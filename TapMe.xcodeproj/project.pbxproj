@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A626A6220CA6BF100CAB267 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A626A6120CA6BF100CAB267 /* Player.swift */; };
 		5E8AECD120BE8EBB001F4012 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8AECD020BE8EBB001F4012 /* AppDelegate.swift */; };
 		5E8AECD620BE8EBB001F4012 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E8AECD420BE8EBB001F4012 /* Main.storyboard */; };
 		5E8AECD820BE8EBC001F4012 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8AECD720BE8EBC001F4012 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		32DC6AF31F3BD48590DA3DF3 /* Pods-TapMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TapMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-TapMe/Pods-TapMe.release.xcconfig"; sourceTree = "<group>"; };
 		5017A9D88BCFD730959CD03E /* Pods_TapMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TapMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A626A6120CA6BF100CAB267 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5E8AECCD20BE8EBB001F4012 /* TapMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E8AECD020BE8EBB001F4012 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5E8AECD520BE8EBB001F4012 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				5E8AECE220BE8F31001F4012 /* LoginViewController.swift */,
 				5E8AECE420BE9427001F4012 /* RegisterViewController.swift */,
 				5E99DFC220BEB31E003D6C2E /* TapMeViewController.swift */,
+				5A626A6120CA6BF100CAB267 /* Player.swift */,
 				5E8AECD420BE8EBB001F4012 /* Main.storyboard */,
 				5E8AECD720BE8EBC001F4012 /* Assets.xcassets */,
 				5E8AECD920BE8EBC001F4012 /* LaunchScreen.storyboard */,
@@ -761,6 +764,7 @@
 				5E8AECE320BE8F31001F4012 /* LoginViewController.swift in Sources */,
 				5E99DFC320BEB31E003D6C2E /* TapMeViewController.swift in Sources */,
 				5E99DFC520BED334003D6C2E /* AlertViewController.swift in Sources */,
+				5A626A6220CA6BF100CAB267 /* Player.swift in Sources */,
 				5E8AECD120BE8EBB001F4012 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

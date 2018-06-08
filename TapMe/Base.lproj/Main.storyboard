@@ -151,15 +151,41 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6iu-0o-rMO">
+                                <rect key="frame" x="175" y="191" width="25" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Game max score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sal-Gc-HN5">
+                                <rect key="frame" x="10" y="592" width="355" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your max score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kh3-kB-x6d">
+                                <rect key="frame" x="10" y="563" width="355" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156859999999" green="0.28627450980000002" blue="0.36862745099999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="sal-Gc-HN5" firstAttribute="leading" secondItem="oLM-vd-owb" secondAttribute="leading" constant="10" id="1Az-Pb-ahV"/>
+                            <constraint firstItem="oLM-vd-owb" firstAttribute="bottom" secondItem="sal-Gc-HN5" secondAttribute="bottom" constant="10" id="5VE-hY-Jek"/>
+                            <constraint firstItem="sal-Gc-HN5" firstAttribute="top" secondItem="Kh3-kB-x6d" secondAttribute="bottom" constant="8" id="6lX-ds-JXF"/>
+                            <constraint firstItem="oLM-vd-owb" firstAttribute="trailing" secondItem="Kh3-kB-x6d" secondAttribute="trailing" constant="10" id="7FZ-pG-Nem"/>
                             <constraint firstItem="rAk-zw-4aw" firstAttribute="top" secondItem="paS-7r-eB9" secondAttribute="bottom" constant="150" id="7sI-hR-Brm"/>
                             <constraint firstItem="SkW-kV-5S7" firstAttribute="top" secondItem="oLM-vd-owb" secondAttribute="top" constant="20" id="E7x-a3-FLs"/>
+                            <constraint firstItem="6iu-0o-rMO" firstAttribute="centerX" secondItem="tub-gS-3gE" secondAttribute="centerX" id="Fde-zx-t2q"/>
                             <constraint firstItem="paS-7r-eB9" firstAttribute="centerX" secondItem="tub-gS-3gE" secondAttribute="centerX" id="RTR-8G-Een"/>
+                            <constraint firstItem="oLM-vd-owb" firstAttribute="right" secondItem="sal-Gc-HN5" secondAttribute="right" constant="10" id="Xrd-CB-TH5"/>
                             <constraint firstItem="paS-7r-eB9" firstAttribute="top" secondItem="oLM-vd-owb" secondAttribute="top" constant="71.5" id="ZVQ-d5-gFe"/>
+                            <constraint firstItem="Kh3-kB-x6d" firstAttribute="leading" secondItem="oLM-vd-owb" secondAttribute="leading" constant="10" id="c3K-SO-rFi"/>
                             <constraint firstItem="rAk-zw-4aw" firstAttribute="centerX" secondItem="tub-gS-3gE" secondAttribute="centerX" id="mcg-Is-HJ9"/>
                             <constraint firstItem="SkW-kV-5S7" firstAttribute="centerX" secondItem="tub-gS-3gE" secondAttribute="centerX" id="pYr-Zh-7Lb"/>
+                            <constraint firstItem="6iu-0o-rMO" firstAttribute="top" secondItem="paS-7r-eB9" secondAttribute="bottom" constant="7.5" id="q1F-N2-EBg"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oLM-vd-owb"/>
                     </view>
@@ -189,7 +215,10 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="gameMaxScore" destination="sal-Gc-HN5" id="sPn-hU-eA7"/>
+                        <outlet property="scoreLabel" destination="6iu-0o-rMO" id="GVI-yr-ewG"/>
                         <outlet property="timerLabel" destination="SkW-kV-5S7" id="EUg-ax-Ipo"/>
+                        <outlet property="yourMaxScore" destination="Kh3-kB-x6d" id="rtL-ou-eFM"/>
                         <segue destination="rYu-dv-lmd" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVC:" id="deB-Wo-Hdw"/>
                     </connections>
                 </viewController>

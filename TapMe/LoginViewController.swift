@@ -60,15 +60,34 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     func login(_ userEmail: String, _ userPassword: String) {
-        Backendless.sharedInstance().userService.setStayLoggedIn(true)
-        Backendless.sharedInstance().userService.login(userEmail, password: userPassword, response: { loggedUser in
-            self.startGame()
+        let queryBuilder = DataQueryBuilder()!
+        queryBuilder.setWhereClause(String(format: "user.email = '%@'", userEmail))
+        Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
+            if (foundPlayers?.first != nil) {
+                Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { playersFound in
+                    if (foundPlayers?.first != nil) {
+                        Backendless.sharedInstance().userService.setStayLoggedIn(true)
+                        Backendless.sharedInstance().userService.login(userEmail, password: userPassword, response: { loggedInUser in
+                            self.startGame()
+                        }, error: { fault in
+                            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                        })
+                    }
+                    else {
+                        AlertViewController.sharedInstance.showRegisterPlayerAlert(self)
+                    }
+                }, error: { fault in
+                    AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                })
+            }
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
     }
     
     @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {
+        print(Backendless.sharedInstance().userService.currentUser)
+        
         if (segue.source .isKind(of: RegisterViewController.ofClass())) {
             login(email!, password!)
         }

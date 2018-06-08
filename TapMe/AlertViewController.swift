@@ -16,6 +16,13 @@ class AlertViewController: UIViewController {
         target.present(alert, animated: true)
     }
     
+    func showRegisterPlayerAlert(_ target: UIViewController) {
+        let alert = UIAlertController(title: "Create a new player", message: "Please sign up as a new player", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        target.view.endEditing(true)
+        target.present(alert, animated: true)
+    }
+    
     func showProfilePicturePicker (_ imageView: UIImageView, _ target: UIViewController) {
         let alert = UIAlertController(title: "Set profie picture", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Use camera", style: .default, handler: { alertAction in
