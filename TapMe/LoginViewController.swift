@@ -56,7 +56,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func startGame() {
-        self.performSegue(withIdentifier: "segueToTapMe", sender: nil)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "segueToTapMe", sender: nil)
+        }       
     }
     
     func login(_ userEmail: String, _ userPassword: String) {
@@ -64,36 +66,29 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         queryBuilder.setWhereClause(String(format: "user.email = '%@'", userEmail))
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
             if (foundPlayers?.first != nil) {
-                Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { playersFound in
-                    if (foundPlayers?.first != nil) {
-                        Backendless.sharedInstance().userService.setStayLoggedIn(true)
-                        Backendless.sharedInstance().userService.login(userEmail, password: userPassword, response: { loggedInUser in
-                            self.startGame()
-                        }, error: { fault in
-                            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-                        })
-                    }
-                    else {
-                        AlertViewController.sharedInstance.showRegisterPlayerAlert(self)
-                    }
+                Backendless.sharedInstance().userService.setStayLoggedIn(true)
+                Backendless.sharedInstance().userService.login(userEmail, password: userPassword, response: { loggedInUser in
+                    self.startGame()
                 }, error: { fault in
                     AlertViewController.sharedInstance.showErrorAlert(fault!, self)
                 })
+            }
+            else {
+                AlertViewController.sharedInstance.showRegisterPlayerAlert(self)
             }
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
     }
     
-    @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {
-        print(Backendless.sharedInstance().userService.currentUser)
-        
+    @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {        
         if (segue.source .isKind(of: RegisterViewController.ofClass())) {
             login(email!, password!)
         }
     }
     
     @IBAction func pressedSignIn(_ sender: Any) {
+        view.endEditing(true)
         login(emailField.text!, passwordField.text!)
         emailField.text = ""
         passwordField.text = ""

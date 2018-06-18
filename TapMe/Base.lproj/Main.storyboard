@@ -350,12 +350,16 @@
         <scene sceneID="nXn-cs-2S8">
             <objects>
                 <tableViewController id="AKW-tC-bGU" customClass="PlayerViewController" customModule="TapMe" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="bej-ed-DuQ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="bej-ed-DuQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.17254901959999999" green="0.24313725489999999" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <activityIndicatorView key="tableFooterView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="XXy-dQ-Yja">
+                            <rect key="frame" x="0.0" y="72" width="375" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlayerCell" textLabel="hmE-qR-fGO" detailTextLabel="JLY-wD-fvK" style="IBUITableViewCellStyleValue1" id="lRb-8i-ITY">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="PlayerCell" textLabel="hmE-qR-fGO" detailTextLabel="JLY-wD-fvK" style="IBUITableViewCellStyleValue1" id="lRb-8i-ITY">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lRb-8i-ITY" id="jau-x6-oMs">
@@ -387,6 +391,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Players" id="oMF-Qg-mZY"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="XXy-dQ-Yja" id="Jrs-Nt-Bvj"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0eG-tQ-je5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

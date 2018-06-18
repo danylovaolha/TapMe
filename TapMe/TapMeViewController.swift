@@ -13,11 +13,12 @@ class TapMeViewController: UIViewController {
     var score = 0
     var worldRecordScore = 0
     var countdownTimer: Timer!
-    var totalTime = 5
+    var totalTime = 0
     var timerStarted = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        renewTotalTime()
         getPlayer(Backendless.sharedInstance().userService.currentUser.email as String)
         self.addDataEventListeners()
     }
@@ -25,6 +26,10 @@ class TapMeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.setToolbarHidden(true, animated: animated)
+    }
+    
+    func renewTotalTime() {
+        totalTime = 10
     }
     
     func startTimer() {
@@ -49,16 +54,14 @@ class TapMeViewController: UIViewController {
         timerStarted = false
         navigationController?.setToolbarHidden(true, animated: true)
         timerLabel.text = ""
-        totalTime = 5
-        
+        renewTotalTime()
         if (player.maxScore < score) {
             player.maxScore = score;
             Backendless.sharedInstance().data.of(Player.ofClass()).save(player, response: { updatedPlayer in
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
             })
-        }
-        
+        }        
         if (worldRecordScore < player.maxScore) {
             let publishOptions = PublishOptions()
             publishOptions.addHeader("bestPlayerEmail", value: player.user?.email)
@@ -77,6 +80,7 @@ class TapMeViewController: UIViewController {
     
     func getPlayer(_ email: String) {
         let queryBuilder = DataQueryBuilder()!
+        queryBuilder.setRelationsDepth(1)
         queryBuilder.setWhereClause(String(format: "user.email = '%@'", email))
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
             self.player = foundPlayers?.first as! Player
@@ -96,7 +100,9 @@ class TapMeViewController: UIViewController {
             Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { result in
                 let bestPlayer = (result?.first as! Player)
                 self.worldRecordScore = bestPlayer.maxScore
-                self.gameMaxScore.text = String(format: "🏆 World record: %i", self.worldRecordScore)
+                DispatchQueue.main.async {
+                    self.gameMaxScore.text = String(format: "🏆 World record: %i", self.worldRecordScore)
+                }
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
             })
@@ -120,23 +126,14 @@ class TapMeViewController: UIViewController {
         })
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "segueToPlayers") {
-            let queryBuilder = DataQueryBuilder()!
-            queryBuilder.setSortBy(["maxScore DESC", "name"])
-            Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { players in
-                let playersVC = segue.destination as! PlayerViewController
-                playersVC.players = players as? [Player]
-                playersVC.tableView.reloadData()
-            }, error: { fault in
-                AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-            })
-        }
-    }
-    
-    @IBAction func pressedLogout(_ sender: Any) {
-        Backendless.sharedInstance().userService.logout()
-        self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)   
+    @IBAction func pressedLogout(_ sender: Any) {        
+        Backendless.sharedInstance().userService.logout({
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
+            }
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+        })
     }
     
     @IBAction func pressedTapMe(_ sender: Any) {

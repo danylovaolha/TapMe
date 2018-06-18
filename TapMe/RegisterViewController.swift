@@ -81,7 +81,6 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
     
     @IBAction func pressedSignUp(_ sender: Any) {
         view.endEditing(true)
-        
         self.profileImageView.isUserInteractionEnabled = false
         self.nameField.isEnabled = false
         self.emailField.isEnabled = false
@@ -90,16 +89,13 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         navigationController?.navigationBar.isUserInteractionEnabled = false
         let color = navigationController?.navigationBar.tintColor
         navigationController?.navigationBar.tintColor = UIColor.lightGray
-        
         activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
-        
-        let data = UIImagePNGRepresentation(profileImageView.image!)
+        activityIndicator.startAnimating()        
+        let data = UIImagePNGRepresentation(cropToBounds(image: profileImageView.image!, width: 256, height: 256) )
         let filePathName = String(format: "/tapMeProfileImages/%@.png", emailField.text!)
         Backendless.sharedInstance().file.uploadFile(filePathName, content: data, overwriteIfExist: true, response: { profileImage in
             let queryBuilder = DataQueryBuilder()!
-            queryBuilder.setWhereClause(String(format: "email = '%@'", self.emailField.text!))
-            
+            queryBuilder.setWhereClause((String(format: "email = '%@'", self.emailField.text!)))
             Backendless.sharedInstance().data.of(BackendlessUser.ofClass()).find(queryBuilder, response: { registeredUsers in
                 if (registeredUsers?.first != nil) {
                     self.createNewPlayer(registeredUsers?.first as? BackendlessUser, profileImage, color)
@@ -128,19 +124,21 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         let newPlayer = Player()
         newPlayer.profileImageUrl = profileImage?.fileURL
         newPlayer.maxScore = 0
-        newPlayer.name = nameField.text
+        newPlayer.name = self.nameField.text
         Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
             let userId: String = registeredUser!.objectId! as String
             Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Useres:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
-                self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
                 self.profileImageView.image = UIImage(named: "profileImage.png")
-                self.nameField.text = ""
-                self.emailField.text = ""
-                self.passwordField.text = ""
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.isHidden = true
-                self.navigationController?.navigationBar.isUserInteractionEnabled = true
-                self.navigationController?.navigationBar.tintColor = color
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.isHidden = true
+                    self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
+                    self.nameField.text = ""
+                    self.emailField.text = ""
+                    self.passwordField.text = ""
+                    self.navigationController?.navigationBar.isUserInteractionEnabled = true
+                    self.navigationController?.navigationBar.tintColor = color                    
+                }             
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
                 self.returnToSignUp(color!)
@@ -149,6 +147,31 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
             self.returnToSignUp(color!)
         })
+    }
+    
+    func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
+        let cgimage = image.cgImage!
+        let contextImage: UIImage = UIImage(cgImage: cgimage)
+        let contextSize: CGSize = contextImage.size
+        var posX: CGFloat = 0.0
+        var posY: CGFloat = 0.0
+        var cgwidth: CGFloat = CGFloat(width)
+        var cgheight: CGFloat = CGFloat(height)
+        if contextSize.width > contextSize.height {
+            posX = ((contextSize.width - contextSize.height) / 2)
+            posY = 0
+            cgwidth = contextSize.height
+            cgheight = contextSize.height
+        } else {
+            posX = 0
+            posY = ((contextSize.height - contextSize.width) / 2)
+            cgwidth = contextSize.width
+            cgheight = contextSize.width
+        }
+        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
+        let imageRef: CGImage = cgimage.cropping(to: rect)!
+        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        return image
     }
     
     func returnToSignUp(_ color: UIColor) {

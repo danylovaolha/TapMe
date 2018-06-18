@@ -6,6 +6,6 @@ target 'TapMe' do
   use_frameworks!
 
   # Pods for TapMe
-pod 'Socket.IO-Client-Swift'
+pod 'Backendless'
 
 end
