@@ -17,11 +17,9 @@
 		5E8AECE520BE9427001F4012 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8AECE420BE9427001F4012 /* RegisterViewController.swift */; };
 		5E99DFC320BEB31E003D6C2E /* TapMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E99DFC220BEB31E003D6C2E /* TapMeViewController.swift */; };
 		5E99DFC520BED334003D6C2E /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E99DFC420BED334003D6C2E /* AlertViewController.swift */; };
-		8EE8D318CEA76AB4879F226B /* Pods_TapMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A079CC841CDFF97871F9FB6 /* Pods_TapMe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2A079CC841CDFF97871F9FB6 /* Pods_TapMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TapMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A626A6120CA6BF100CAB267 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5AAFE27D20CABFDE00C503B1 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		5E8AECCD20BE8EBB001F4012 /* TapMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,8 +32,6 @@
 		5E8AECE420BE9427001F4012 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		5E99DFC220BEB31E003D6C2E /* TapMeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapMeViewController.swift; sourceTree = "<group>"; };
 		5E99DFC420BED334003D6C2E /* AlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
-		7295F918BE90DBFDBA4079D2 /* Pods-TapMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TapMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-TapMe/Pods-TapMe.release.xcconfig"; sourceTree = "<group>"; };
-		7B573CD75693F8471FCB0C9B /* Pods-TapMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TapMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TapMe/Pods-TapMe.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,7 +39,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8EE8D318CEA76AB4879F226B /* Pods_TapMe.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,8 +50,6 @@
 			children = (
 				5E8AECCF20BE8EBB001F4012 /* TapMe */,
 				5E8AECCE20BE8EBB001F4012 /* Products */,
-				EB61C6834E82B38DA137FFB7 /* Pods */,
-				D956DB6AE7F4CD14A9BBB26A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -86,23 +79,6 @@
 			path = TapMe;
 			sourceTree = "<group>";
 		};
-		D956DB6AE7F4CD14A9BBB26A /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2A079CC841CDFF97871F9FB6 /* Pods_TapMe.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EB61C6834E82B38DA137FFB7 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7B573CD75693F8471FCB0C9B /* Pods-TapMe.debug.xcconfig */,
-				7295F918BE90DBFDBA4079D2 /* Pods-TapMe.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -110,11 +86,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5E8AECDF20BE8EBC001F4012 /* Build configuration list for PBXNativeTarget "TapMe" */;
 			buildPhases = (
-				93E1FE2D0C9502BBB940FB00 /* [CP] Check Pods Manifest.lock */,
 				5E8AECC920BE8EBB001F4012 /* Sources */,
 				5E8AECCA20BE8EBB001F4012 /* Frameworks */,
 				5E8AECCB20BE8EBB001F4012 /* Resources */,
-				8FF47373919CA5E0A4FD88A7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -170,47 +144,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		8FF47373919CA5E0A4FD88A7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TapMe/Pods-TapMe-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
-				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TapMe/Pods-TapMe-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		93E1FE2D0C9502BBB940FB00 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-TapMe-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E8AECC920BE8EBB001F4012 /* Sources */ = {
@@ -365,14 +298,16 @@
 		};
 		5E8AECE020BE8EBC001F4012 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B573CD75693F8471FCB0C9B /* Pods-TapMe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 73FSJC7BUF;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TapMe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.backendless.TapMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -384,14 +319,16 @@
 		};
 		5E8AECE120BE8EBC001F4012 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7295F918BE90DBFDBA4079D2 /* Pods-TapMe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 73FSJC7BUF;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TapMe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.backendless.TapMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
