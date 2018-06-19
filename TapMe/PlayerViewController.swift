@@ -11,7 +11,7 @@ class PlayerViewController: UITableViewController {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         getPlayers()
-        addUpdateListener()
+        addListeners()
     }
     
     func getPlayers() {
@@ -28,9 +28,14 @@ class PlayerViewController: UITableViewController {
         })
     }
     
-    func addUpdateListener() {
-        let dataStore = Backendless.sharedInstance().data.of(Player.ofClass())
-        dataStore?.rt.addUpdateListener({ updatedPlayer in
+    func addListeners() {
+        let eventHandler = Backendless.sharedInstance().data.of(Player.ofClass()).rt
+        eventHandler?.addCreateListener({ createdPlayer in
+            self.getPlayers()
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+        })
+        eventHandler?.addUpdateListener({ updatedPlayer in
             self.getPlayers()
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
