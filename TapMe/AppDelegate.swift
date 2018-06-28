@@ -8,7 +8,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let APP_ID = "APP_ID"
     let API_KEY = "API_KEY"
-    let SERVER_URL = "http://api.backendless.com"
+    let SERVER_URL = "https://api.backendless.com"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Backendless.sharedInstance().hostURL = SERVER_URL
