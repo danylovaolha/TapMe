@@ -10,14 +10,14 @@ class AlertViewController: UIViewController {
     }
     
     func showErrorAlert(_ fault: Fault, _ target: UIViewController) {
-        let alert = UIAlertController(title: String(format: "❗️Error %@", fault.faultCode), message: fault.detail, preferredStyle: .alert)
+        let alert = UIAlertController(title: "❗️Error", message: fault.detail, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         target.view.endEditing(true)
         target.present(alert, animated: true)
     }
     
-    func showErrorAlertWithExit(_ fault: Fault, _ target: UIViewController) {
-        let alert = UIAlertController(title: String(format: "❗️Error %@", fault.faultCode), message: fault.detail, preferredStyle: .alert)
+    func showErrorAlertWithExit(_ target: UIViewController) {
+        let alert = UIAlertController(title: "❗️Error", message: "Make sure to configure the app with your APP ID and API KEY before running the app. \nApplication will be closed", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { action in
             exit(0)
         }))

@@ -18,7 +18,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         Types.tryblock({
             Backendless.sharedInstance().userService.logout()
         }, catchblock: { fault in
-            AlertViewController.sharedInstance.showErrorAlertWithExit(Fault(message: "Error", detail: "Make sure to configure the app with your APP ID and API KEY before running the app. \nApplication will be closed"), self)
+            AlertViewController.sharedInstance.showErrorAlertWithExit(self)
         })
         let tap = UITapGestureRecognizer(target: self, action: #selector(setProfileImage))
         profileImageView.addGestureRecognizer(tap)

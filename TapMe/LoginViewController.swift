@@ -31,6 +31,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        view.endEditing(true)
         navigationController?.setNavigationBarHidden(false, animated: animated)
         navigationController?.setToolbarHidden(false, animated: animated)
         NotificationCenter.default.removeObserver(self)
@@ -70,7 +71,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 Backendless.sharedInstance().userService.login(userEmail, password: userPassword, response: { loggedInUser in
                     self.startGame()
                 }, error: { fault in
-                    AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                    if (fault?.faultCode == "3087") {
+                        AlertViewController.sharedInstance.showErrorAlert(Fault(message: fault?.message, detail: "Please confirm your email address so you can login"), self)
+                    }
+                    else {
+                        AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                    }                    
                 })
             }
             else {
@@ -78,7 +84,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }, error: { fault in
             if (fault?.faultCode == "404") {
-                AlertViewController.sharedInstance.showErrorAlertWithExit(Fault(message: "Error", detail: "Make sure to configure the app with your APP ID and API KEY before running the app. \nApplication will be closed"), self)
+                AlertViewController.sharedInstance.showErrorAlertWithExit(self)
             }
             else {
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
@@ -86,16 +92,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         })
     }
     
-    @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {        
+    @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {
         if (segue.source.isKind(of: RegisterViewController.ofClass())) {
             login(email!, password!)
         }
     }
     
     @IBAction func pressedSignIn(_ sender: Any) {
+        self.login(self.emailField.text!, self.passwordField.text!)
         view.endEditing(true)
         emailField.text = ""
         passwordField.text = ""
-        self.login(self.emailField.text!, self.passwordField.text!)
     }
 }
