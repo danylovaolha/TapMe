@@ -16,6 +16,15 @@ class AlertViewController: UIViewController {
         target.present(alert, animated: true)
     }
     
+    func showErrorAlertWithExit(_ fault: Fault, _ target: UIViewController) {
+        let alert = UIAlertController(title: String(format: "❗️Error %@", fault.faultCode), message: fault.detail, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { action in
+            exit(0)
+        }))
+        target.view.endEditing(true)
+        target.present(alert, animated: true)
+    }
+    
     func showRegisterPlayerAlert(_ target: UIViewController) {
         let alert = UIAlertController(title: "👤 Create a new player", message: "Please sign up as a new player", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))

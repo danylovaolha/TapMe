@@ -77,20 +77,25 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 AlertViewController.sharedInstance.showRegisterPlayerAlert(self)
             }
         }, error: { fault in
-            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            if (fault?.faultCode == "404") {
+                AlertViewController.sharedInstance.showErrorAlertWithExit(Fault(message: "Error", detail: "Make sure to configure the app with your APP ID and API KEY before running the app. \nApplication will be closed"), self)
+            }
+            else {
+                AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            }
         })
     }
     
     @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {        
-        if (segue.source .isKind(of: RegisterViewController.ofClass())) {
+        if (segue.source.isKind(of: RegisterViewController.ofClass())) {
             login(email!, password!)
         }
     }
     
     @IBAction func pressedSignIn(_ sender: Any) {
         view.endEditing(true)
-        login(emailField.text!, passwordField.text!)
         emailField.text = ""
         passwordField.text = ""
+        self.login(self.emailField.text!, self.passwordField.text!)
     }
 }

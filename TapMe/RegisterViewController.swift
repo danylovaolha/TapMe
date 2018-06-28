@@ -15,7 +15,11 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        Backendless.sharedInstance().userService.logout()
+        Types.tryblock({
+            Backendless.sharedInstance().userService.logout()
+        }, catchblock: { fault in
+            AlertViewController.sharedInstance.showErrorAlertWithExit(Fault(message: "Error", detail: "Make sure to configure the app with your APP ID and API KEY before running the app. \nApplication will be closed"), self)
+        })
         let tap = UITapGestureRecognizer(target: self, action: #selector(setProfileImage))
         profileImageView.addGestureRecognizer(tap)
         profileImageView.isUserInteractionEnabled = true
