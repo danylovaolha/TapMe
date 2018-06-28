@@ -58,7 +58,7 @@ class PlayerViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlayerCell", for: indexPath)
         let player = players![indexPath.row]
         cell.textLabel?.text = player.name
-        cell.detailTextLabel?.text = String(format: "%i scores", player.maxScore)
+        cell.detailTextLabel?.text = String(format: "%i taps", player.maxScore)
         let image = UIImage(named: "profileImage.png")
         cell.imageView?.image = image
         cell.layoutIfNeeded()

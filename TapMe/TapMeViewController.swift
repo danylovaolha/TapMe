@@ -84,9 +84,11 @@ class TapMeViewController: UIViewController {
         queryBuilder.setWhereClause(String(format: "user.email = '%@'", email))
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
             self.player = foundPlayers?.first as! Player
-            self.addMessageListeners()
             self.fillScores(self.player)
-            DispatchQueue.main.async { self.navigationItem.title = self.player.name }
+            self.addMessageListeners()
+            DispatchQueue.main.async {
+                self.navigationItem.title = self.player.name
+            }            
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })

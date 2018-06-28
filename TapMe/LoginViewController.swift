@@ -16,7 +16,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard Backendless.sharedInstance().userService.currentUser == nil else {
-            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(startGame), userInfo: nil, repeats: false)
+            if (Backendless.sharedInstance().userService.isValidUserToken()) {
+                timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(startGame), userInfo: nil, repeats: false)
+            }
+            else {
+                Backendless.sharedInstance().userService.logout({
+                }, error: { fault in
+                    if (fault?.faultCode == "404") {
+                        AlertViewController.sharedInstance.showErrorAlertWithExit(self)
+                    }
+                })
+            }
             return
         }
     }
@@ -59,7 +69,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func startGame() {
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "segueToTapMe", sender: nil)
-        }       
+        }
     }
     
     func login(_ userEmail: String, _ userPassword: String) {
@@ -99,9 +109,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func pressedSignIn(_ sender: Any) {
+        self.view.endEditing(true)
         self.login(self.emailField.text!, self.passwordField.text!)
-        view.endEditing(true)
-        emailField.text = ""
-        passwordField.text = ""
+        self.emailField.text = ""
+        self.passwordField.text = ""
     }
 }
