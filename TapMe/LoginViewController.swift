@@ -67,9 +67,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func startGame() {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "segueToTapMe", sender: nil)
-        }
+        self.performSegue(withIdentifier: "segueToTapMe", sender: nil)
     }
     
     func login(_ userEmail: String, _ userPassword: String) {

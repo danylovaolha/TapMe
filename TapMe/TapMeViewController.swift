@@ -37,7 +37,7 @@ class TapMeViewController: UIViewController {
         countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
         timerStarted = true
         score = 0
-        DispatchQueue.main.async { self.scoreLabel.text = "0" }
+        self.scoreLabel.text = "0"
     }
     
     @objc func updateTime() {
@@ -86,29 +86,23 @@ class TapMeViewController: UIViewController {
             self.player = foundPlayers?.first as! Player
             self.fillScores(self.player)
             self.addMessageListeners()
-            DispatchQueue.main.async {
-                self.navigationItem.title = self.player.name
-            }            
+            self.navigationItem.title = self.player.name
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
     }
     
     func fillScores(_ player: Player) {
-        DispatchQueue.main.async {
-            self.yourMaxScore.text = String(format: "⭐️ Your max score: %i", player.maxScore)
-            let queryBuilder = DataQueryBuilder()!
-            queryBuilder.setProperties(["Max(maxScore) as maxScore"])
-            Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { result in
-                let bestPlayer = (result?.first as! Player)
-                self.worldRecordScore = bestPlayer.maxScore
-                DispatchQueue.main.async {
-                    self.gameMaxScore.text = String(format: "🏆 World record: %i", self.worldRecordScore)
-                }
-            }, error: { fault in
-                AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-            })
-        }
+        self.yourMaxScore.text = String(format: "⭐️ Your max score: %i", player.maxScore)
+        let queryBuilder = DataQueryBuilder()!
+        queryBuilder.setProperties(["Max(maxScore) as maxScore"])
+        Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { result in
+            let bestPlayer = (result?.first as! Player)
+            self.worldRecordScore = bestPlayer.maxScore
+            self.gameMaxScore.text = String(format: "🏆 World record: %i", self.worldRecordScore)
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+        })
     }
     
     func addDataEventListeners() {
@@ -130,9 +124,7 @@ class TapMeViewController: UIViewController {
     
     @IBAction func pressedLogout(_ sender: Any) {        
         Backendless.sharedInstance().userService.logout({
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
-            }
+            self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
@@ -143,7 +135,7 @@ class TapMeViewController: UIViewController {
             startTimer()
         }
         score += 1;
-        DispatchQueue.main.async { self.scoreLabel.text = String(format: "%i", self.score) }
+        self.scoreLabel.text = String(format: "%i", self.score)
     }
     
     @IBAction func pressedStop(_ sender: Any) {

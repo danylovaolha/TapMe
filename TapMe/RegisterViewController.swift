@@ -98,67 +98,61 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         let data = UIImagePNGRepresentation(cropToBounds(image: profileImageView.image!, width: 256, height: 256) )
         let filePathName = String(format: "/tapMeProfileImages/%@.png", emailField.text!)
         
-        DispatchQueue.main.async {
-            let emailFieldText = self.emailField.text as NSString?
-            let passwordFieldText = self.passwordField.text as NSString?
-            
-            Backendless.sharedInstance().file.uploadFile(filePathName, content: data, overwriteIfExist: true, response: { profileImage in
-                let queryBuilder = DataQueryBuilder()!
-                queryBuilder.setWhereClause((String(format: "email = '%@'", emailFieldText!)))
-                Backendless.sharedInstance().data.of(BackendlessUser.ofClass()).find(queryBuilder, response: { registeredUsers in
-                    if (registeredUsers?.first != nil) {
-                        self.createNewPlayer(registeredUsers?.first as? BackendlessUser, profileImage, color)
-                    }
-                    else {
-                        let user = BackendlessUser()
-                        user.email = emailFieldText
-                        user.password =  passwordFieldText!
-                        Backendless.sharedInstance().userService.register(user, response: { registeredUser in
-                            self.createNewPlayer(registeredUser, profileImage, color)
-                        }, error: { fault in
-                            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-                            self.returnToSignUp(color!)
-                        })
-                    }
-                }, error: {  fault in
-                    AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-                })
-            }, error: { fault in
+        let emailFieldText = self.emailField.text as NSString?
+        let passwordFieldText = self.passwordField.text as NSString?
+        
+        Backendless.sharedInstance().file.uploadFile(filePathName, content: data, overwriteIfExist: true, response: { profileImage in
+            let queryBuilder = DataQueryBuilder()!
+            queryBuilder.setWhereClause((String(format: "email = '%@'", emailFieldText!)))
+            Backendless.sharedInstance().data.of(BackendlessUser.ofClass()).find(queryBuilder, response: { registeredUsers in
+                if (registeredUsers?.first != nil) {
+                    self.createNewPlayer(registeredUsers?.first as? BackendlessUser, profileImage, color)
+                }
+                else {
+                    let user = BackendlessUser()
+                    user.email = emailFieldText
+                    user.password =  passwordFieldText!
+                    Backendless.sharedInstance().userService.register(user, response: { registeredUser in
+                        self.createNewPlayer(registeredUser, profileImage, color)
+                    }, error: { fault in
+                        AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                        self.returnToSignUp(color!)
+                    })
+                }
+            }, error: {  fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-                self.returnToSignUp(color!)
             })
-        }
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            self.returnToSignUp(color!)
+        })
     }
     
     func createNewPlayer(_ registeredUser: BackendlessUser?, _ profileImage: BackendlessFile?, _ color: UIColor?) {
-        DispatchQueue.main.async {
-            let newPlayer = Player()
-            newPlayer.profileImageUrl = profileImage?.fileURL
-            newPlayer.maxScore = 0
-            newPlayer.name = self.nameField.text
-            Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
-                let userId: String = registeredUser!.objectId! as String
-                Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Users:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
-                    DispatchQueue.main.async {
-                        self.profileImageView.image = UIImage(named: "profileImage.png")
-                        self.activityIndicator.stopAnimating()
-                        self.activityIndicator.isHidden = true
-                        self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
-                        self.nameField.text = ""
-                        self.emailField.text = ""
-                        self.passwordField.text = ""
-                        self.navigationController?.navigationBar.isUserInteractionEnabled = true
-                        self.navigationController?.navigationBar.tintColor = color
-                    }
-                }, error: { fault in
-                    AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-                    self.returnToSignUp(color!)
-                })
+        let newPlayer = Player()
+        newPlayer.profileImageUrl = profileImage?.fileURL
+        newPlayer.maxScore = 0
+        newPlayer.name = self.nameField.text
+        Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
+            let userId: String = registeredUser!.objectId! as String
+            Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Users:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
+                self.profileImageView.image = UIImage(named: "profileImage.png")
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
+                self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
+                self.nameField.text = ""
+                self.emailField.text = ""
+                self.passwordField.text = ""
+                self.navigationController?.navigationBar.isUserInteractionEnabled = true
+                self.navigationController?.navigationBar.tintColor = color
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
                 self.returnToSignUp(color!)
             })
-        }
+        }, error: { fault in
+            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+            self.returnToSignUp(color!)
+        })
     }
     
     func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {

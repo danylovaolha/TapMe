@@ -20,9 +20,7 @@ class PlayerViewController: UITableViewController {
         queryBuilder.setSortBy(["maxScore DESC", "name"])
         dataStore?.find(queryBuilder, response: { updatedPlayers in
             self.players = updatedPlayers as? [Player]
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+            self.tableView.reloadData()
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
@@ -87,9 +85,7 @@ class PlayerViewController: UITableViewController {
     
     func setImageFromUrl(_ url: String, _ cell: UITableViewCell) {
         if (getImageFromUserDefaults(url) != nil) {
-            DispatchQueue.main.async {
-                cell.imageView?.image = self.getImageFromUserDefaults(url)
-            }
+            cell.imageView?.image = self.getImageFromUserDefaults(url)
         }
         else {
             DispatchQueue.global(qos: .default).async(execute: {() -> Void in
