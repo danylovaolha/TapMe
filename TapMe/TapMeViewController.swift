@@ -40,7 +40,7 @@ class TapMeViewController: UIViewController {
         self.scoreLabel.text = "0"
     }
     
-    @objc func updateTime() {
+    @IBAction func updateTime() {
         timerLabel.text = "\(timeFormatted(totalTime))"
         if totalTime != 0 {
             totalTime -= 1
@@ -55,14 +55,14 @@ class TapMeViewController: UIViewController {
         navigationController?.setToolbarHidden(true, animated: true)
         timerLabel.text = ""
         renewTotalTime()
-        if (player.maxScore < score) {
+        if player.maxScore < score {
             player.maxScore = score;
             Backendless.sharedInstance().data.of(Player.ofClass()).save(player, response: { updatedPlayer in
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
             })
         }        
-        if (worldRecordScore < player.maxScore) {
+        if worldRecordScore < player.maxScore {
             let publishOptions = PublishOptions()
             publishOptions.addHeader("bestPlayerEmail", value: player.user?.email)
             Backendless.sharedInstance().messaging.publish("TapMeChannel", message: "You have set a new record!", publishOptions: publishOptions, response: { messageStatus in
@@ -131,7 +131,7 @@ class TapMeViewController: UIViewController {
     }
     
     @IBAction func pressedTapMe(_ sender: Any) {
-        if (!timerStarted) {
+        if !timerStarted {
             startTimer()
         }
         score += 1;

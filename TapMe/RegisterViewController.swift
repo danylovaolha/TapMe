@@ -40,7 +40,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc func setProfileImage() {
+    @IBAction func setProfileImage() {
         AlertViewController.sharedInstance.showProfilePicturePicker(profileImageView, self)
     }
     
@@ -61,7 +61,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         return true
     }
     
-    @objc func keyboardWillShow(notification:NSNotification){
+    @IBAction func keyboardWillShow(notification:NSNotification){
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -70,13 +70,13 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         scrollView.contentInset = contentInset
     }
     
-    @objc func keyboardWillHide(notification:NSNotification){
+    @IBAction func keyboardWillHide(notification:NSNotification){
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "unwindToLoginVC") {
+        if segue.identifier == "unwindToLoginVC" {
             let loginVC = segue.destination as! LoginViewController
             loginVC.email = emailField.text
             loginVC.password = passwordField.text
@@ -105,7 +105,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
             let queryBuilder = DataQueryBuilder()!
             queryBuilder.setWhereClause((String(format: "email = '%@'", emailFieldText!)))
             Backendless.sharedInstance().data.of(BackendlessUser.ofClass()).find(queryBuilder, response: { registeredUsers in
-                if (registeredUsers?.first != nil) {
+                if registeredUsers?.first != nil {
                     self.createNewPlayer(registeredUsers?.first as? BackendlessUser, profileImage, color)
                 }
                 else {

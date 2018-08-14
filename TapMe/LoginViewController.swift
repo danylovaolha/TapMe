@@ -16,13 +16,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         guard Backendless.sharedInstance().userService.currentUser == nil else {
-            if (Backendless.sharedInstance().userService.isValidUserToken()) {
+            if Backendless.sharedInstance().userService.isValidUserToken() {
                 timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(startGame), userInfo: nil, repeats: false)
             }
             else {
                 Backendless.sharedInstance().userService.logout({
                 }, error: { fault in
-                    if (fault?.faultCode == "404") {
+                    if fault?.faultCode == "404" {
                         AlertViewController.sharedInstance.showErrorAlertWithExit(self)
                     }
                 })
@@ -52,7 +52,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    @objc func keyboardWillShow(notification:NSNotification){
+    @IBAction func keyboardWillShow(notification:NSNotification){
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -61,12 +61,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         scrollView.contentInset = contentInset
     }
     
-    @objc func keyboardWillHide(notification:NSNotification){
+    @IBAction func keyboardWillHide(notification:NSNotification){
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
     }
     
-    @objc func startGame() {
+    @IBAction func startGame() {
         self.performSegue(withIdentifier: "segueToTapMe", sender: nil)
     }
     
@@ -74,12 +74,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let queryBuilder = DataQueryBuilder()!
         queryBuilder.setWhereClause(String(format: "user.email = '%@'", userEmail))
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
-            if (foundPlayers?.first != nil) {
+            if foundPlayers?.first != nil {
                 Backendless.sharedInstance().userService.setStayLoggedIn(true)
                 Backendless.sharedInstance().userService.login(userEmail, password: userPassword, response: { loggedInUser in
                     self.startGame()
                 }, error: { fault in
-                    if (fault?.faultCode == "3087") {
+                    if fault?.faultCode == "3087" {
                         AlertViewController.sharedInstance.showErrorAlert(Fault(message: fault?.message, detail: "Please confirm your email address so you can login"), self)
                     }
                     else {
@@ -91,7 +91,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 AlertViewController.sharedInstance.showRegisterPlayerAlert(self)
             }
         }, error: { fault in
-            if (fault?.faultCode == "404") {
+            if fault?.faultCode == "404" {
                 AlertViewController.sharedInstance.showErrorAlertWithExit(self)
             }
             else {
@@ -101,7 +101,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func unwindToLoginVC(_ segue: UIStoryboardSegue) {
-        if (segue.source.isKind(of: RegisterViewController.ofClass())) {
+        if segue.source.isKind(of: RegisterViewController.ofClass()) {
             login(email!, password!)
         }
     }

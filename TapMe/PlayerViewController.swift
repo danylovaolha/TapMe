@@ -45,7 +45,7 @@ class PlayerViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (players != nil) {
+        if players != nil {
             return (players?.count)!
         }
         return 0
@@ -84,7 +84,7 @@ class PlayerViewController: UITableViewController {
     }
     
     func setImageFromUrl(_ url: String, _ cell: UITableViewCell) {
-        if (getImageFromUserDefaults(url) != nil) {
+        if getImageFromUserDefaults(url) != nil {
             cell.imageView?.image = self.getImageFromUserDefaults(url)
         }
         else {
@@ -106,7 +106,7 @@ class PlayerViewController: UITableViewController {
     func getImageFromUserDefaults(_ key: String) -> UIImage? {
         if let data = UserDefaults.standard.object(forKey: IMAGES_KEY) as? Data {
             if let images = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String : UIImage] {
-                if (images[key] != nil) {
+                if images[key] != nil {
                     return images[key]!
                 }
             }
@@ -115,7 +115,7 @@ class PlayerViewController: UITableViewController {
     }
     
     func saveImageToUserDefaults(_ image: UIImage?, _ key: String) {
-        if (image != nil) {
+        if image != nil {
             var images = [String : Any]()
             if let data = UserDefaults.standard.object(forKey: IMAGES_KEY) as? Data {
                 images = NSKeyedUnarchiver.unarchiveObject(with: data) as! [String : Any]
@@ -123,7 +123,7 @@ class PlayerViewController: UITableViewController {
             else {
                 images = [String : UIImage]()
             }
-            if (images[key] == nil) {
+            if images[key] == nil {
                 images[key] = image;
             }
             let data = NSKeyedArchiver.archivedData(withRootObject: images as Any)

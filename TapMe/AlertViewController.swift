@@ -35,7 +35,7 @@ class AlertViewController: UIViewController {
     func showProfilePicturePicker (_ imageView: UIImageView, _ target: UIViewController) {
         let alert = UIAlertController(title: "👤 Set profie picture", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Use camera", style: .default, handler: { alertAction in
-            if (!UIImagePickerController.isSourceTypeAvailable(.camera)) {
+            if !UIImagePickerController.isSourceTypeAvailable(.camera) {
                 self.showErrorAlert(Fault(message: "", detail: "No device found. Camera is not available"), target)
             }
             else {
