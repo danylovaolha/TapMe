@@ -11,7 +11,16 @@ class PlayerViewController: UITableViewController {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         getPlayers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         addListeners()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeListeners()
     }
     
     func getPlayers() {
@@ -38,6 +47,10 @@ class PlayerViewController: UITableViewController {
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
+    }
+    
+    func removeListeners() {
+       Backendless.sharedInstance().data.of(Player.ofClass()).rt.removeAllListeners()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

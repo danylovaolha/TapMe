@@ -20,12 +20,18 @@ class TapMeViewController: UIViewController {
         super.viewDidLoad()
         renewTotalTime()
         getPlayer(Backendless.sharedInstance().userService.currentUser.email as String)
-        self.addDataEventListeners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.setToolbarHidden(true, animated: animated)
+        self.addDataEventListeners()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeDataEventListeners()
+        removeMessageListeners()
     }
     
     func renewTotalTime() {
@@ -113,6 +119,10 @@ class TapMeViewController: UIViewController {
         })
     }
     
+    func removeDataEventListeners() {
+        Backendless.sharedInstance().data.of(Player.ofClass()).rt.removeAllListeners()
+    }
+    
     func addMessageListeners() {
         channel = Backendless.sharedInstance().messaging.subscribe("TapMeChannel")
         channel?.addMessageListenerString(String(format: "bestPlayerEmail = '%@''", (player.user?.email)!), response: { message in
@@ -120,6 +130,10 @@ class TapMeViewController: UIViewController {
         }, error: { fault in
             AlertViewController.sharedInstance.showErrorAlert(fault!, self)
         })
+    }
+    
+    func removeMessageListeners() {
+        channel?.removeAllListeners()
     }
     
     @IBAction func pressedLogout(_ sender: Any) {        
