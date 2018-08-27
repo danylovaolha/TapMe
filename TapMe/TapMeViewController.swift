@@ -99,7 +99,7 @@ class TapMeViewController: UIViewController {
     }
     
     func fillScores(_ player: Player) {
-        self.yourMaxScore.text = String(format: "⭐️ Your max score: %i", player.maxScore)
+        self.yourMaxScore.text = String(format: "⭐️ Your max score: %i", self.player.maxScore)
         let queryBuilder = DataQueryBuilder()!
         queryBuilder.setProperties(["Max(maxScore) as maxScore"])
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { result in
