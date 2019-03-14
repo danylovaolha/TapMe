@@ -89,7 +89,7 @@ class TapMeViewController: UIViewController {
         queryBuilder.setRelationsDepth(1)
         queryBuilder.setWhereClause(String(format: "user.email = '%@'", email))
         Backendless.sharedInstance().data.of(Player.ofClass()).find(queryBuilder, response: { foundPlayers in
-            self.player = foundPlayers?.first as! Player
+            self.player = foundPlayers?.first as! Player?
             self.fillScores(self.player)
             self.addMessageListeners()
             self.navigationItem.title = self.player.name

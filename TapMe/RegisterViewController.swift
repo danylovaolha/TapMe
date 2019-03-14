@@ -30,8 +30,8 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setToolbarHidden(true, animated: animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -48,9 +48,12 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
         profileImageView.contentMode = .scaleAspectFill
-        profileImageView.image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        profileImageView.image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
         profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
         profileImageView.clipsToBounds = true
         dismiss(animated: true, completion: nil)
@@ -63,7 +66,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
     
     @IBAction func keyboardWillShow(notification:NSNotification){
         var userInfo = notification.userInfo!
-        var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         var contentInset:UIEdgeInsets = scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height + 20
@@ -95,7 +98,7 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         navigationController?.navigationBar.tintColor = UIColor.lightGray
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()        
-        let data = UIImagePNGRepresentation(cropToBounds(image: profileImageView.image!, width: 256, height: 256) )
+        let data = cropToBounds(image: profileImageView.image!, width: 256, height: 256).pngData( )
         let filePathName = String(format: "/tapMeProfileImages/%@.png", emailField.text!)
         
         let emailFieldText = self.emailField.text as NSString?
@@ -136,15 +139,17 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
             let userId: String = registeredUser!.objectId! as String
             Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Users:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
-                self.profileImageView.image = UIImage(named: "profileImage.png")
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.isHidden = true
-                self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
-                self.nameField.text = ""
-                self.emailField.text = ""
-                self.passwordField.text = ""
-                self.navigationController?.navigationBar.isUserInteractionEnabled = true
-                self.navigationController?.navigationBar.tintColor = color
+                DispatchQueue.main.async {
+                    self.profileImageView.image = UIImage(named: "profileImage.png")
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.isHidden = true
+                    self.performSegue(withIdentifier: "unwindToLoginVC", sender: nil)
+                    self.nameField.text = ""
+                    self.emailField.text = ""
+                    self.passwordField.text = ""
+                    self.navigationController?.navigationBar.isUserInteractionEnabled = true
+                    self.navigationController?.navigationBar.tintColor = color
+                }                
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
                 self.returnToSignUp(color!)
@@ -192,4 +197,14 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
         self.signUpButton.isEnabled = true
         navigationController?.navigationBar.isUserInteractionEnabled = true
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
 }
