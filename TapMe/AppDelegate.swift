@@ -6,8 +6,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    let APP_ID = "A5328A39-B6AD-C54E-FF19-D72B95729D00"
-    let API_KEY = "5871ABA9-0C18-1E1B-FFAE-93AF0FFFB800"
+    let APP_ID = "APP ID"
+    let API_KEY = "API KEY"
     let SERVER_URL = "https://api.backendless.com"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

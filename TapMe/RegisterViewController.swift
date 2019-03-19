@@ -49,9 +49,9 @@ class RegisterViewController: UIViewController, UITextFieldDelegate, UINavigatio
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-// Local variable inserted by Swift 4.2 migrator.
-let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
-
+        // Local variable inserted by Swift 4.2 migrator.
+        let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+        
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
         profileImageView.layer.cornerRadius = self.profileImageView.frame.size.width / 2;
@@ -132,14 +132,14 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
     }
     
     func createNewPlayer(_ registeredUser: BackendlessUser?, _ profileImage: BackendlessFile?, _ color: UIColor?) {
-        let newPlayer = Player()
-        newPlayer.profileImageUrl = profileImage?.fileURL
-        newPlayer.maxScore = 0
-        newPlayer.name = self.nameField.text
-        Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
-            let userId: String = registeredUser!.objectId! as String
-            Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Users:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
-                DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            let newPlayer = Player()
+            newPlayer.profileImageUrl = profileImage?.fileURL
+            newPlayer.maxScore = 0
+            newPlayer.name = self.nameField.text
+            Backendless.sharedInstance().data.of(Player.ofClass()).save(newPlayer, response: { player in
+                let userId: String = registeredUser!.objectId! as String
+                Backendless.sharedInstance().data.of(Player.ofClass()).setRelation("user:Users:1", parentObjectId: (player as! Player).objectId, childObjects: [userId], response: { relationSet in
                     self.profileImageView.image = UIImage(named: "profileImage.png")
                     self.activityIndicator.stopAnimating()
                     self.activityIndicator.isHidden = true
@@ -149,15 +149,15 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
                     self.passwordField.text = ""
                     self.navigationController?.navigationBar.isUserInteractionEnabled = true
                     self.navigationController?.navigationBar.tintColor = color
-                }                
+                }, error: { fault in
+                    AlertViewController.sharedInstance.showErrorAlert(fault!, self)
+                    self.returnToSignUp(color!)
+                })
             }, error: { fault in
                 AlertViewController.sharedInstance.showErrorAlert(fault!, self)
                 self.returnToSignUp(color!)
             })
-        }, error: { fault in
-            AlertViewController.sharedInstance.showErrorAlert(fault!, self)
-            self.returnToSignUp(color!)
-        })
+        }
     }
     
     func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
@@ -201,10 +201,10 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
 
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
-	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+    return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
 }
 
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
-	return input.rawValue
+    return input.rawValue
 }
